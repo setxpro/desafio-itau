@@ -33,7 +33,7 @@ public class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
             throw new FieldCannotBeEmptyException("data");
         }
 
-        if (transaction.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+        if (transaction.getAmount().compareTo(BigDecimal.ZERO) == 0) {
             throw new InvalidValueToTransactionException(transaction.getAmount());
         }
 
