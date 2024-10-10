@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+
+  # POSTGRES
+  postgres_transactions:
+    image: postgres:latest
+    container_name: postgres_transactions
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: transactions
+    ports:
+      - "5432:5432"
+
+  # TRANSACTIONS
+  transaction:
+    container_name: transaction
+    image: transaction:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '0.0.0.0:8080:8080'
+    depends_on:
+      - postgres_transactions
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres_transactions:5432/transactions'
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
