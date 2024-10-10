@@ -28,4 +28,9 @@ public class TransactionRepositoryGateway implements TransactionGateway {
                 )
         );
     }
+
+    @Override
+    public void deleteAllTransactions() {
+        transactionRepository.deleteAll();
+    }
 }
