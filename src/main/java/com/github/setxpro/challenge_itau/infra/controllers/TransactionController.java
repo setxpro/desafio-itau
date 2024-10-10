@@ -1,21 +1,33 @@
 package com.github.setxpro.challenge_itau.infra.controllers;
 
 import com.github.setxpro.challenge_itau.application.usecases.CreateTransactionUseCase;
+import com.github.setxpro.challenge_itau.application.usecases.DeleteAllTransactionsUseCase;
 import com.github.setxpro.challenge_itau.domain.entities.Transaction;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-public record TransactionController(CreateTransactionUseCase createTransactionUseCase) {
+@RequestMapping(value = "/transaction")
+@Tag(name = "Transações")
+public record TransactionController(
+        CreateTransactionUseCase createTransactionUseCase,
+        DeleteAllTransactionsUseCase deleteAllTransactionsUseCase
+) {
 
+    @Operation(summary = "Responsável por criar uma nova transação", method = "POST")
     @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) throws Exception {
+    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws Exception {
         return new ResponseEntity<>(createTransactionUseCase.execute(transaction), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Responsável por deletar todas as transações", method = "DELETE")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllTransactions() {
+        deleteAllTransactionsUseCase.execute();
+        return ResponseEntity.noContent().build();
     }
 }
