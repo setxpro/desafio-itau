@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.DoubleSummaryStatistics;
-
 @RestController
 @RequestMapping(value = "/statistics")
 public record StatisticsController(StatisticsService statisticsService) {
